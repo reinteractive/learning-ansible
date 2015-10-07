@@ -1,0 +1,22 @@
+- name: Determine if first run
+  shell: "[ -f /etc/ansible/facts.d/last_run.fact ] && echo 'no' || echo 'yes'"
+  register: is_first_run
+  changed_when: "is_first_run.stdout == 'yes'"
+  tags:
+    - ignit
+
+- name: Set first run fact
+  set_fact:
+    first_run: true
+  when: "is_first_run.stdout == 'yes'"
+  changed_when: "is_first_run.stdout == 'yes'"
+  tags:
+    -ignit
+
+- name: Update APT package cache
+  apt: update_cache=yes
+  when: first_run is defined or apt_upgrade is defined
+  tags:
+    - packages
+    - ignit
+
