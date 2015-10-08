@@ -1,17 +1,1 @@
-- name: Fact folder
-  file:
-    path: /etc/ansible/facts.d
-    state: directory
-    mode: 755
-- name: Last run fact
-  file:
-    path: /etc/ansible/facts.d/last_run.fact
-    state: touch
-    mode: 644
-  register: last_run_fact_file
-- name: Record local facts
-  template:
-    src: last_run.fact.j2
-    dest: "{{last_run_fact_file.dest}}"
-    mode: 644
-  register: facts_file
+- include: last_run.yml
